@@ -14,8 +14,9 @@ public class main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        FenetreStat b=new FenetreStat();
         // TODO code application logic here
-        jfreetest.Fenetre a=new jfreetest.Fenetre();
+      //  jfreetest.Fenetre a=new jfreetest.Fenetre();
 
     }
 
