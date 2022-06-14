@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Db {
     private String username;
@@ -29,8 +30,8 @@ public class Db {
         }
     }
 
-    public String makeQuery(String query, int returnQueryElement) {
-        String returnValue = "";
+    public ArrayList<String> makeQuery(String query, int returnQueryElement) {
+        ArrayList<String> list = new ArrayList<>();
         try {
             ResultSet res = stmt.executeQuery(query);
             if(returnQueryElement<=0){
@@ -40,9 +41,9 @@ public class Db {
             while (res.next()) {
                 for (int i = 1; i <= returnQueryElement; i++) {
                     if (i >= returnQueryElement) {
-                        returnValue += res.getString(i) + "\n";
+                        list.add(res.getString(i));
                     } else {
-                        returnValue += res.getString(i) + " : ";
+                        list.add(res.getString(i));
                     }
 
                 }
@@ -50,6 +51,6 @@ public class Db {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return returnValue;
+        return list;
     }
 }
