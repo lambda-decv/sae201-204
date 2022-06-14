@@ -8,17 +8,17 @@ public class Db {
     private String host;
     Statement stmt;
 
-    public Db(String username, String password) {
-        this.host = "jdbc:mariadb://iutbg-lamp.univ-lyon1.fr:3306/EDT";
+    public Db(String host,String username, String password) {
+        this.host = "jdbc:postgresql://" + host;
         this.username = username;
         this.password = password;
 
 
         Connection co = null;
         try {
-            Class.forName("org.mariadb.jdbc.Driver");
-            //Class.forName("org.postgresql.Driver");
-            co = DriverManager.getConnection(host, username, host);
+            //Class.forName("org.mariadb.jdbc.Driver");
+            Class.forName("org.postgresql.Driver");
+            co = DriverManager.getConnection(this.host, username, password);
 
             stmt = co.createStatement();
 
@@ -33,10 +33,14 @@ public class Db {
         String returnValue = "";
         try {
             ResultSet res = stmt.executeQuery(query);
+            if(returnQueryElement<=0){
+                System.out.println("Request successfully executed !");
+                return null;
+            }
             while (res.next()) {
-                for (int i = 0; i < returnQueryElement; i++) {
+                for (int i = 1; i <= returnQueryElement; i++) {
                     if (i >= returnQueryElement) {
-                        returnValue += res.getString(i);
+                        returnValue += res.getString(i) + "\n";
                     } else {
                         returnValue += res.getString(i) + " : ";
                     }
