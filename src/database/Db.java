@@ -1,9 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Db {
     private String username;
@@ -11,24 +8,24 @@ public class Db {
     private String host;
     Statement stmt;
 
-    Db(String host, String username, String password) {
-        if (host.contains("jdbc:mariadb://")) {
-            this.host = host;
-        } else {
-            this.host = "jdbc:mariadb://" + host;
-        }
+    public Db(String username, String password) {
+        this.host = "jdbc:mariadb://iutbg-lamp.univ-lyon1.fr:3306/EDT";
         this.username = username;
         this.password = password;
 
-        try {
-            Class.forName("org.mariadb.Driver");
-            //Class.forName("org.postgresql.Driver");
 
-            Connection co = DriverManager.getConnection(host, username, host);
+        Connection co = null;
+        try {
+            Class.forName("org.mariadb.jdbc.Driver");
+            //Class.forName("org.postgresql.Driver");
+            co = DriverManager.getConnection(host, username, host);
+
             stmt = co.createStatement();
 
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }catch (ClassNotFoundException e){
+            e.printStackTrace();
         }
     }
 
