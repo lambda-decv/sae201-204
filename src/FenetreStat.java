@@ -4,9 +4,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -53,33 +57,30 @@ public class FenetreStat extends JFrame implements ActionListener {
         this.setLayout(new GridBagLayout());
 
 
-        //Graphes
         cont.gridwidth = 3;
-        cont.gridheight = 3;
-
-
-        cont.gridx = 2;
-        cont.gridy = 4;
-        ChartPanel camenbert = drawnCircu();
-        camenbert.setPreferredSize(new java.awt.Dimension(310, 175));
-        camenbert.setBorder(new BevelBorder(BevelBorder.RAISED));
-        pano.add(camenbert, cont);
-
-        cont.gridx = 9;
-        cont.gridy = 4;
-        ChartPanel histogram = drawnHisto();
-        histogram.setPreferredSize(new java.awt.Dimension(310, 175));
-        histogram.setBorder(new BevelBorder(BevelBorder.RAISED));
-        pano.add(histogram, cont);
-
-        cont.gridwidth = 12;
-        cont.gridheight = 1;
         cont.gridx = 0;
-        cont.gridy = 1;
+        cont.gridy = 0;
         ChartPanel line= drawnLine();
         line.setPreferredSize(new java.awt.Dimension(200, 200));
-        line.setBorder(new BevelBorder(BevelBorder.RAISED));
+        //line.setBorder(new BevelBorder(BevelBorder.RAISED));
         pano.add(line, cont);
+
+        cont.gridheight = 3;
+        cont.gridwidth = 1;
+        cont.gridx = 0;
+        cont.gridy = 1;
+        ChartPanel camenbert = drawnCircu();
+        camenbert.setPreferredSize(new java.awt.Dimension(310, 175));
+        //camenbert.setBorder(new BevelBorder(BevelBorder.RAISED));
+        pano.add(camenbert, cont);
+
+        cont.gridx = 2;
+        cont.gridy = 1;
+        ChartPanel histogram = drawnHisto();
+        histogram.setPreferredSize(new java.awt.Dimension(310, 175));
+        //histogram.setBorder(new BevelBorder(BevelBorder.RAISED));
+        pano.add(histogram, cont);
+
 
         //Button
         cont.gridwidth = 1;
@@ -87,34 +88,32 @@ public class FenetreStat extends JFrame implements ActionListener {
 
 
         random = new JButton("Random()");
-        cont.gridx = 8;
-        cont.gridy = 5;
+        cont.gridx = 1;
+        cont.gridy = 1;
         pano.add(random, cont);
 
-        cont.gridwidth = 1;
-        cont.gridheight = 1;
         bd = new JButton("BD");
-        cont.gridx = 8;
-        cont.gridy = 6;
+        cont.gridx = 1;
+        cont.gridy = 2;
         pano.add(bd, cont);
 
-
-        cont.gridheight = 1;
          exit=new JButton("Fermer");
-          cont.gridx=8;
-         cont.gridy=7;
+          cont.gridx=1;
+         cont.gridy=3;
          pano.add(exit,cont);
 
-        textCamen = new JLabel("Température max de ces 7 derniers jours");
-        textCamen.setBorder(new BevelBorder(BevelBorder.LOWERED));
-        cont.gridx = 9;
-        cont.gridy = 7;
+        cont.fill = GridBagConstraints.CENTER;
+
+        textCamen = new JLabel("Taux température de la journée");
+        //textCamen.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        cont.gridx = 0;
+        cont.gridy = 4;
         pano.add(textCamen, cont);
 
-        textHisto = new JLabel("Taux température de la journée");
-        textCamen.setBorder(new BevelBorder(BevelBorder.LOWERED));
+        textHisto = new JLabel("Température max de ces 7 derniers jours");
+        //textCamen.setBorder(new BevelBorder(BevelBorder.LOWERED));
         cont.gridx = 2;
-        cont.gridy = 7;
+        cont.gridy = 4;
         pano.add(textHisto, cont);
 
         exit.addActionListener(this);
@@ -128,17 +127,35 @@ public class FenetreStat extends JFrame implements ActionListener {
 
 
     //Diagramme ligne
-    public  ChartPanel drawnLine() {
-        DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        dataset.addValue(33, "20", "20"); // (Temp, on s'en fout, seconde)
-        dataset.addValue(24, "25", "30");
-        dataset.addValue(28, "20", "40");
-        dataset.addValue(36, "33", "50");
-      JFreeChart chart= ChartFactory.createLineChart("Température actuel","Temps (s)","Température",dataset,PlotOrientation.VERTICAL,true,true,true);
-      chart.setBackgroundPaint(new Color(128, 150, 138));
-        ChartPanel frame=new  ChartPanel(chart);
-        return frame;
-    }
+
+        public ChartPanel drawnLine() {
+            XYSeriesCollection dataset = new XYSeriesCollection();
+            XYSeries data = new XYSeries("Temperature");
+            data.add(20,33 ); // (Temp, on s'en fout, seconde)
+            data.add( 30,24);
+            data.add(40, 28);
+            data.add(50, 36);
+            dataset.addSeries(data);
+            JFreeChart chart = ChartFactory.createScatterPlot(
+                    "Température actuel",
+                    "Temps (s)",
+                    "Température",
+                    dataset,
+                    PlotOrientation.VERTICAL,
+                    false,
+                    true,
+                    true
+            );
+            XYPlot plot = (XYPlot) chart.getPlot();
+            XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
+            renderer.setSeriesLinesVisible(0, true);
+            plot.setRenderer(renderer);
+            chart.setBackgroundPaint(new Color(128, 150, 138));
+            final ChartPanel chartPanel = new ChartPanel(chart);
+            chartPanel.setPreferredSize(new java.awt.Dimension(500, 270));
+
+            return chartPanel;
+        }
 
 
     public ChartPanel drawnHisto() {
@@ -177,6 +194,8 @@ public class FenetreStat extends JFrame implements ActionListener {
 
         JFreeChart pieChart = ChartFactory.createPieChart("Taux température de la journée", pieDataset, true, true, true);
         pieChart.setBackgroundPaint(new Color(128, 150, 138));
+        pieChart.setBorderPaint(Color.black);
+        pieChart.setBorderVisible(true);
         ChartPanel cPanel = new ChartPanel(pieChart);
 
         PiePlot plot = (PiePlot) pieChart.getPlot();
