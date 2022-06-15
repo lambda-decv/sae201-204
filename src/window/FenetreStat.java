@@ -32,8 +32,7 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
     JPanel pano;
     GridBagConstraints cont;
     JMenu Menu;
-    JMenuItem statBD, statRandom, statRandomCamen, statRandomHisto, statBDCamen, statBDHisto;
-    Db database;
+    XYSeries data = new XYSeries("Temperature");
     boolean appui = false;
     public FenetreStat() {
         this.setTitle("Diagramme");
@@ -66,7 +65,7 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
         cont.gridwidth = 3;
         cont.gridx = 0;
         cont.gridy = 0;
-        ChartPanel line = drawnLine();
+        ChartPanel line = drawnLine(data);
         line.setPreferredSize(new java.awt.Dimension(200, 200));
         line.setBorder(new BevelBorder(BevelBorder.RAISED));
         pano.add(line, cont);
@@ -130,14 +129,8 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
 
 
     //Diagramme ligne
-    public ChartPanel drawnLine() {
+    public ChartPanel drawnLine(XYSeries data) {
         XYSeriesCollection dataset = new XYSeriesCollection();
-        XYSeries data = new XYSeries("Temperature");
-//        data.add(33, 20); // (Temp, on s'en fout, seconde)
-//        data.add(24, 30);
-//        data.add(28, 40);
-//        data.add(36, 50);
-        //data.add(x,y);
         dataset.addSeries(data);
         JFreeChart chart = ChartFactory.createScatterPlot(
                 "Température actuel",
@@ -168,8 +161,15 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
         }
 
 //    Créa du graphique
-        JFreeChart barChart = ChartFactory.createBarChart("évolution de la température", "Jours",
-                "Température", dataset, PlotOrientation.VERTICAL, false, true, true);
+        JFreeChart barChart = ChartFactory.createBarChart(
+                "évolution de la température",
+                "Jours",
+                "Température",
+                dataset, PlotOrientation.VERTICAL,
+                false,
+                true,
+                true
+        );
         barChart.setTitle("Températures");
         barChart.setBackgroundPaint(new Color(128, 150, 138));
         CategoryPlot plot = barChart.getCategoryPlot();
@@ -221,17 +221,6 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
             init();
         }
         if (e.getSource() == bd) {
-            CustomThread thread = new CustomThread();
-            thread.run();
-            for (int i = 0; i < 6; i++) {
-                System.out.println("PP");
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ex) {
-                    throw new RuntimeException(ex);
-                }
-            }
-
 
         }
         // if (e.getSource() ==exit) {
@@ -241,6 +230,10 @@ public class FenetreStat extends JFrame implements ActionListener,Runnable {
         //pano.add(graph, cont);
         //graph.setPreferredSize(new java.awt.Dimension(200, 200));
         // }
+    }
+
+    public void updateDataset(double temp, int time){
+        data.add(time, temp);
     }
 
     @Override

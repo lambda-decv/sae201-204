@@ -5,24 +5,29 @@ import window.FenetreStat;
 
 import java.sql.*;
 import java.time.Instant;
+import java.time.LocalTime;
 
 public class Main {
     public static void main(String[] args) throws InterruptedException {
         FenetreStat b=new FenetreStat();
 
-        Timestamp time;
-        String host = "192.168.0.149:5432/sae";
+        LocalTime time;
+        String host = "192.168.149.199:5432/sae";
         String username = "administrator";
         String password = "admin";
 
         Db bdd = new Db(host,username,password);
-/*        String request;
+        String request;
+        double temp;
+
         for(int i=0;i<100;i++){
-                time = new Timestamp(System.currentTimeMillis());
-                request = "INSERT INTO temperature VALUES(" +i+ ",'" +time+ "'," + Math.random()*40 +");";
-                System.out.println(request);
+                time = java.time.LocalTime.now();
+                temp = Math.random()*40;
+                request = "INSERT INTO temperature VALUES(" +i+ ",'" +time+ "'," + temp +");";
+            System.out.println(request);
                 bdd.makeQuery(request,0 );
+                b.updateDataset(temp,i);
                 Thread.sleep(2000);
-        }*/
+        }
     }
 }
