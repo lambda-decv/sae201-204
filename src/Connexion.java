@@ -26,18 +26,18 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
     FenetreStat owner;
     JButton exit;
     JButton valider;
-    JTextField nom;
+    JLabel nom;
     JTextField mdp;
     JLabel text;
 
-    public Connexion(FenetreStat owner, Boolean choix) {
+    public Connexion(FenetreStat owner, int utilisateur) {
         this.owner = owner;
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setBackground(Color.white);
         this.setModal(true);
         
         this.setLocationRelativeTo(owner);
-        this.setSize(new Dimension(100, 100));
+        this.setSize(new Dimension(125, 125));
         this.setLocation(350, 125);
         this.setLayout(new GridBagLayout());
         GridBagConstraints cont = new GridBagConstraints();
@@ -45,10 +45,14 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
         
 //        this.setBounds(300, 300, 50, 50);
         
-        nom = new JTextField("");
-        if (choix)
-            nom.setText("Admin");
-        nom.setText("Nom :");
+     
+        if (utilisateur==1){
+            nom=new JLabel("administrator");
+           
+        }
+        if (utilisateur==2){
+            nom=new JLabel("manager");
+        }
         cont.gridx = 0;
         cont.gridy = 0;
         this.add(nom, cont);
@@ -70,7 +74,6 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
         this.add(exit, cont);
         
         mdp.addActionListener(this);
-        nom.addActionListener(this);
         exit.addActionListener(this);
         valider.addActionListener(this);
 
@@ -83,7 +86,8 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
         if (e.getSource() == exit) {
             this.setVisible(false);
         }
-        if (e.getSource() == valider) {
+        if (e.getSource() == valider ) {
+            pAdmin a=new pAdmin(this);
 
         }
     }
@@ -92,9 +96,6 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
     public void focusGained(FocusEvent e) {
         if (e.getSource() == mdp) {
             mdp.setText("d");
-        }
-        if (e.getSource() == nom) {
-            nom.setText("d");
         }
     }
 
