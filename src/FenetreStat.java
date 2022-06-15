@@ -27,7 +27,7 @@ public class FenetreStat extends JFrame implements ActionListener {
     JLabel textHisto;
     JMenu identification;
     JMenuItem admin;
-    JMenuItem profil;
+    JMenuItem gestionnaire;
     JPanel pano;
     GridBagConstraints cont;
  
@@ -55,9 +55,9 @@ public class FenetreStat extends JFrame implements ActionListener {
         JMenuBar MenuBar = new JMenuBar();
         identification = new JMenu("Connexion");
         admin = new JMenuItem("Admin");
-        profil = new JMenuItem("Invité");
+        gestionnaire = new JMenuItem("Utilisateurs");
         identification.add(admin);
-        identification.add(profil);
+        identification.add(gestionnaire);
         MenuBar.add(identification);
         this.setJMenuBar(MenuBar);
 
@@ -132,7 +132,7 @@ public class FenetreStat extends JFrame implements ActionListener {
         pano.add(textHisto, cont);
 
         admin.addActionListener(this);
-        profil.addActionListener(this);
+        gestionnaire.addActionListener(this);
         exit.addActionListener(this);
         bd.addActionListener(this);
         random.addActionListener(this);
@@ -235,11 +235,12 @@ public class FenetreStat extends JFrame implements ActionListener {
 
         }
         if (e.getSource() ==admin) {
-            Connexion admi= new Connexion(this,true);
+            Connexion admi= new Connexion(this,1);
         }
-        if (e.getSource()==profil) {
-            Connexion admi= new Connexion(this,false);
+        if (e.getSource()==gestionnaire) {
+            Connexion uti= new Connexion(this,2);
         }
+
         if (e.getSource() ==random) {
             init();
         }
