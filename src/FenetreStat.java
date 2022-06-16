@@ -17,6 +17,9 @@ import javax.swing.border.BevelBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormatSymbols;
+import java.util.Calendar;
+import java.util.Locale;
 
 public class FenetreStat extends JFrame implements ActionListener {
 
@@ -55,7 +58,7 @@ public class FenetreStat extends JFrame implements ActionListener {
         JMenuBar MenuBar = new JMenuBar();
         identification = new JMenu("Connexion");
         admin = new JMenuItem("Admin");
-        gestionnaire = new JMenuItem("Utilisateurs");
+        gestionnaire = new JMenuItem("Gestionnaire"); 
         identification.add(admin);
         identification.add(gestionnaire);
         MenuBar.add(identification);
@@ -176,10 +179,13 @@ public class FenetreStat extends JFrame implements ActionListener {
 
 
     public ChartPanel drawnHisto() {
+        
+           DateFormatSymbols dfsFR = new DateFormatSymbols(Locale.FRENCH);         
+          String[] joursSemaineFR = dfsFR.getWeekdays();
 //    Importation des data
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         for (int i=0;i<7;i++) {
-            dataset.addValue(15+Math.random() * 25, "<30", "j"+i); //Avec l'enum recup les jours
+            dataset.addValue(15+Math.random() * 25, "<30", ""+joursSemaineFR[i]); //Avec l'enum recup les jours
         }
 
 //    Créa du graphique

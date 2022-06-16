@@ -1,4 +1,3 @@
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -37,7 +36,7 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
         this.setModal(true);
         
         this.setLocationRelativeTo(owner);
-        this.setSize(new Dimension(125, 125));
+        this.setSize(new Dimension(150, 125));//
         this.setLocation(350, 125);
         this.setLayout(new GridBagLayout());
         GridBagConstraints cont = new GridBagConstraints();
@@ -46,19 +45,20 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
 //        this.setBounds(300, 300, 50, 50);
         
      
-        if (utilisateur==1){
+        if (utilisateur==1){//
             nom=new JLabel("administrator");
+            this.setTitle("login admin");
            
         }
-        if (utilisateur==2){
+        if (utilisateur==2){//
             nom=new JLabel("manager");
+            this.setTitle("login manager");
         }
         cont.gridx = 0;
         cont.gridy = 0;
         this.add(nom, cont);
 
         mdp = new JTextField("");
-        mdp.setText("MDP");
         cont.gridx = 0;
         cont.gridy = 2;
         this.add(mdp, cont);
@@ -73,7 +73,7 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
         exit = new JButton("Exit");
         this.add(exit, cont);
         
-        mdp.addActionListener(this);
+        mdp.addFocusListener(this);//
         exit.addActionListener(this);
         valider.addActionListener(this);
 
@@ -91,16 +91,19 @@ public class Connexion extends JDialog implements ActionListener, FocusListener 
 
         }
     }
-
+//
     @Override
     public void focusGained(FocusEvent e) {
-        if (e.getSource() == mdp) {
-            mdp.setText("d");
+          if (e.getSource()== mdp) {
+            mdp.setText("");  //Direct le focus gained
         }
     }
 
     @Override
     public void focusLost(FocusEvent e) {
+          if (e.getSource()== mdp) {
+            mdp.setText("mot de passe");
+        }
     }
 
 }

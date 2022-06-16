@@ -1,4 +1,3 @@
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,8 +11,11 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -25,9 +27,12 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Alexis
  */
+
+//Reprendre la page entière
 public class pAdmin extends JDialog implements ActionListener,ListSelectionListener {
 
     Connexion owner;
+    GridBagConstraints cont;
 
     // Attribution rôle
     JComboBox role;
@@ -38,11 +43,13 @@ public class pAdmin extends JDialog implements ActionListener,ListSelectionListe
     JLabel suppr;
     JList listasup;
     
+    
     // Ajout
     JLabel ajout;
     JTextField ajout1;
     JTextField ajout2;
     JButton valider;
+    JList list;
     
     // Exit
     JButton exit;
@@ -52,82 +59,112 @@ public class pAdmin extends JDialog implements ActionListener,ListSelectionListe
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         this.setBackground(Color.white);
         this.setModal(true);
-        
+        this.setBackground(new Color(128, 150, 138));
+        this.setTitle("Gestion base");
         this.setLocationRelativeTo(owner);
-        this.setSize(new Dimension(400,400));
+        this.setSize(new Dimension(600,400));
         this.setLayout(new GridBagLayout());
-        GridBagConstraints cont = new GridBagConstraints();
+        cont = new GridBagConstraints();
         cont.fill = GridBagConstraints.BOTH;
-
         
-        //Texte
+        
+        init(2);
+   
+        exit.addActionListener(this);
+        this.pack();
+      this.setVisible(true);
+    }
+    
+
+   public void init(int rolex){
+ 
+        
+        
+      
+        
+        //Ajout
         cont.gridheight=2;
         cont.gridwidth=2;
         ajout = new JLabel("Ajout de données : ");
         cont.gridx = 1;
         cont.gridy = 1;
         this.add(ajout, cont);
-
-      
         
+         cont.gridheight=1;
+        cont.gridwidth=1;
+          ajout2 = new JTextField("");
+        cont.gridx = 2;
+        cont.gridy = 3;
+        this.add(ajout2, cont);
         
-        labelArea = new JTextArea("Attribution rôle \n\n                       à :");
-        labelArea.setEditable(false);
-        labelArea.setOpaque(false);
-        cont.gridx = 5;
-        cont.gridy = 1;
-        this.add(labelArea, cont);
-        
-          suppr = new JLabel("Supression données :");
+        valider=new JButton("Valider");
         cont.gridx = 3;
-        cont.gridy = 4;
+        cont.gridy = 3;
+        this.add(valider, cont);
+        //Supp
+
+        cont.gridheight=2;
+        cont.gridwidth=2;
+          suppr = new JLabel("Supression données :");
+         cont.gridx = 2;
+        cont.gridy = 6;
         this.add(suppr, cont);
         
-        //Case
+        cont.gridx = 4;
+        cont.gridy = 6;
+        this.add(new JScrollPane(drawJList()),cont);
+          list.addListSelectionListener(this);
+       
+          if (rolex==1){
+        this.setTitle("Gestion admin");
+        //Role
         
- cont.gridheight=1;
+         labelArea = new JTextArea("Attribution rôle \n\n                       à :");
+        labelArea.setEditable(false);
+        labelArea.setOpaque(false);
+        cont.gridx = 7;
+        cont.gridy = 3;
+        this.add(labelArea, cont);
+       cont.gridheight=1;
         cont.gridwidth=1;
           String[] tabRole= new String[] {"administrator","manager"};
         role = new JComboBox<String>(tabRole);
-        cont.gridx = 7;
-        cont.gridy = 1;
+        cont.gridx = 9;
+        cont.gridy = 3;
         this.add(role, cont);
       
          String[] tabUser= new String[] {"administrator","manager"};
         user = new JComboBox<String>(tabUser);
-        cont.gridx = 7;
-        cont.gridy = 2;
-        this.add(user, cont);
+        cont.gridx = 9;
+        cont.gridy = 4;
+        this.add(user, cont);}
 
-       
-        ajout1 = new JTextField("");
-        cont.gridx = 0;
-        cont.gridy = 2;
-        this.add(ajout1, cont);
         
+     
         exit = new JButton("exit");
-        cont.gridx = 5;
+        cont.gridx = 6;
         cont.gridy = 0;
         this.add(exit, cont);
+        
+        //Case
+        
 
-
-        ajout2 = new JTextField("");
-        cont.gridx = 2;
-        cont.gridy = 2;
-        this.add(ajout2, cont);
+       
+      
         
         
-        valider=new JButton("Valider");
-        cont.gridx = 3;
-        cont.gridy = 2;
-        this.add(valider, cont);
 
-        exit.addActionListener(this);
-      this.setVisible(true);
-    }
-    
-
+       
+   }
    
+   public JList drawJList(){
+        String[] a={"daronne","a,","jules","corto","axeld'avion"};
+        list=new JList(a);
+        list.setVisibleRowCount(4);
+        list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        return list;
+       
+   }
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -142,7 +179,8 @@ public class pAdmin extends JDialog implements ActionListener,ListSelectionListe
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        if (e.getValueIsAdjusting())
+        System.out.println(list.getSelectedIndex());
     }
 
 }
